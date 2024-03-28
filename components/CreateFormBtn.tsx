@@ -21,6 +21,7 @@ import {ImSpinner2} from "react-icons/im";
 import {toast} from "@/components/ui/use-toast";
 import {CreateForm} from "@/actions/form";
 import {BsFileEarmarkPlus} from "react-icons/bs";
+import {useRouter} from "next/navigation";
 
 const formSchema = z.object({
     name: z.string().min(4),
@@ -31,6 +32,7 @@ const formSchema = z.object({
 type formSchemaType = z.infer<typeof formSchema>;
 
 function CreateFormBtn() {
+    const router = useRouter();
     const form = useForm<formSchemaType>({
         resolver: zodResolver(formSchema)
     });
@@ -43,6 +45,8 @@ function CreateFormBtn() {
                 title: "Success",
                 description: "Form created successfully"
             });
+
+            router.push(`/builder/${formId}`);
 
         } catch (error) {
             toast({
