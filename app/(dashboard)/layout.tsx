@@ -15,7 +15,7 @@ function Layout({children}: { children: ReactNode }) {
             </nav>
 
 
-            <main className="flex w-full flex-glow">
+            <main className="flex w-full flex-grow">
                 {children}
             </main>
         </div>
