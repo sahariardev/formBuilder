@@ -28,7 +28,7 @@ function Designer() {
 
             if (!active || !over) return;
 
-            const  isDesignerBtnElement = active.data?.current?.isDesignerBtnElement;
+            const isDesignerBtnElement = active.data?.current?.isDesignerBtnElement;
 
             if (isDesignerBtnElement) {
                 const type = active.data?.current?.type;
@@ -64,7 +64,7 @@ function Designer() {
                 {elements.length > 0 && (
                     <div className="flex flex-col  w-full gap-2 p-4">
                         {
-                            elements.map((el)=> (
+                            elements.map((el) => (
                                 <DesignerElementWrapper key={el.id} element={el}/>
                             ))
                         }
@@ -76,7 +76,8 @@ function Designer() {
     </div>;
 }
 
-function DesignerElementWrapper({element}:{element:FormElementInstance}) {
+function DesignerElementWrapper({element}: { element: FormElementInstance }) {
+    const [mouseIsOver, setMouseIsOver] = useState<boolean>(false);
     const topHalf = useDroppable({
         id: element.id + "-top",
         data: {
@@ -98,9 +99,24 @@ function DesignerElementWrapper({element}:{element:FormElementInstance}) {
     const DesignerElement = FormElements[element.type].designerComponent;
 
     return (
-        <div className="relative h-[120px] flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset">
-            <div ref={topHalf.setNodeRef} className={cn("absolute w-full h-1/2 rounded-t-md", topHalf.isOver && "bg-green-500")}></div>
-            <div ref={bottomHalf.setNodeRef} className={cn("absolute bottom-0 w-full h-1/2 rounded-b-md", bottomHalf.isOver && "bg-red-500")}></div>
+        <div
+            className="relative h-[120px] flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
+            onMouseEnter={() => setMouseIsOver(true)}
+            onMouseLeave={() => setMouseIsOver(false)}
+        >
+            <div ref={topHalf.setNodeRef}
+                 className={cn("absolute w-full h-1/2 rounded-t-md", topHalf.isOver && "bg-green-500")}></div>
+            <div ref={bottomHalf.setNodeRef}
+                 className={cn("absolute bottom-0 w-full h-1/2 rounded-b-md", bottomHalf.isOver && "bg-red-500")}></div>
+
+            {mouseIsOver && (
+                <>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse">
+                        <p className="text-muted-foreground text-sm">Click for properties or drag to move</p>
+                    </div>
+                </>
+            )}
+
             <div className="flex w-full h-[120px] items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none">
                 <DesignerElement elementInstance={element}/>
             </div>
