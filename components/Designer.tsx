@@ -12,7 +12,7 @@ import {Button} from "@/components/ui/button";
 import {BiSolidTrash} from "react-icons/bi";
 
 function Designer() {
-    const {elements, addElement} = useDesigner();
+    const {elements, addElement, selectedElement, setSelectedElement} = useDesigner();
 
     const droppable = useDroppable({
         id: "designer-drop-area",
@@ -37,13 +37,15 @@ function Designer() {
                 const newElement = FormElements[type as ElementsType].construct(idGenerator());
                 addElement(0, newElement);
             }
-
-            console.log("DRAG END", event);
         }
     });
 
     return <div className="flex w-full h-full">
-        <div className="p-4 w-full">
+        <div className="p-4 w-full" onClick={(e) => {
+            if(selectedElement) {
+                setSelectedElement(null);
+            }
+        }}>
             <div
                 ref={droppable.setNodeRef}
                 className={classNames}>
@@ -80,7 +82,7 @@ function Designer() {
 
 function DesignerElementWrapper({element}: { element: FormElementInstance }) {
     const [mouseIsOver, setMouseIsOver] = useState<boolean>(false);
-    const {removeElement} = useDesigner();
+    const {removeElement, selectedElement, setSelectedElement} = useDesigner();
     const topHalf = useDroppable({
         id: element.id + "-top",
         data: {
@@ -122,6 +124,10 @@ function DesignerElementWrapper({element}: { element: FormElementInstance }) {
             className="relative h-[120px] flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
             onMouseEnter={() => setMouseIsOver(true)}
             onMouseLeave={() => setMouseIsOver(false)}
+            onClick={(e) => {
+                e.stopPropagation();
+                setSelectedElement(element);
+            }}
         >
             <div ref={topHalf.setNodeRef}
                  className={cn("absolute w-full h-1/2 rounded-t-md")}></div>
@@ -134,8 +140,9 @@ function DesignerElementWrapper({element}: { element: FormElementInstance }) {
                         <Button
                             className="flex justify-center h-full border rounded-md rounded-l-none bg-red-500"
                             variant={"outline"}
-                            onClick={() => {
-                                removeElement(element.id)
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                removeElement(element.id);
                             }}
                         >
                             <BiSolidTrash className="h-6 w-6"/>
