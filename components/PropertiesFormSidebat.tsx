@@ -30,7 +30,7 @@ function PropertiesFormSidebat() {
             >
                 <AiOutlineClose/>
             </Button>
-            <Separator />
+            <Separator className="mb-4"/>
             <PropertiesForm elementInstance={selectedElement}/>
         </div>
     );

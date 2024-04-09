@@ -12,7 +12,7 @@ import {Button} from "@/components/ui/button";
 import {BiSolidTrash} from "react-icons/bi";
 
 function Designer() {
-    const {elements, addElement, selectedElement, setSelectedElement} = useDesigner();
+    const {elements, addElement,removeElement, selectedElement, setSelectedElement} = useDesigner();
 
     const droppable = useDroppable({
         id: "designer-drop-area",
@@ -31,12 +31,58 @@ function Designer() {
             if (!active || !over) return;
 
             const isDesignerBtnElement = active.data?.current?.isDesignerBtnElement;
+            const isDroppingOverDesignerDropArea = over.data?.current?.isDesignerDropArea;
 
-            if (isDesignerBtnElement) {
+            if (isDesignerBtnElement && isDroppingOverDesignerDropArea) {
                 const type = active.data?.current?.type;
                 const newElement = FormElements[type as ElementsType].construct(idGenerator());
-                addElement(0, newElement);
+                addElement(elements.length, newElement);
+                return;
             }
+
+            const isDroppingOverTopHalfDesignerElement = over.data?.current?.isTopHalfDesignerElement;
+            const isDroppingOverBottomHalfDesignerElement = over.data?.current?.isBttompHalfDesignerElement;
+
+            if (isDesignerBtnElement && (isDroppingOverTopHalfDesignerElement || isDroppingOverBottomHalfDesignerElement)) {
+                const type = active.data?.current?.type;
+                const newElement = FormElements[type as ElementsType].construct(idGenerator());
+
+                const overElementIndex = elements.findIndex((el) => el.id === over.data?.current?.elementId);
+
+                let nextElementIndex = overElementIndex;
+
+                if (isDroppingOverBottomHalfDesignerElement) {
+                    nextElementIndex = overElementIndex + 1
+                }
+
+                addElement(nextElementIndex, newElement);
+                return;
+            }
+
+            const isDraggingDesignerElement = active.data?.current?.isDesignerElement;
+            const droppingDesignerElementOverAnotherDesignerElement = (isDroppingOverTopHalfDesignerElement || isDroppingOverBottomHalfDesignerElement)
+                && isDraggingDesignerElement
+
+            if (droppingDesignerElementOverAnotherDesignerElement) {
+
+                const activeId = active.data?.current?.elementId;
+                const overId = over.data?.current?.elementId;
+
+                const activeElementIndex = elements.findIndex(el => el.id === activeId);
+                const overElementIndex = elements.findIndex(el => el.id === overId);
+
+                const activeElement = {...elements[activeElementIndex]};
+
+                let nextElementIndex = overElementIndex;
+
+                if (isDroppingOverBottomHalfDesignerElement) {
+                    nextElementIndex = overElementIndex + 1
+                }
+
+                removeElement(activeId);
+                addElement(nextElementIndex, activeElement);
+            }
+
         }
     });
 
@@ -162,8 +208,9 @@ function DesignerElementWrapper({element}: { element: FormElementInstance }) {
                 )
             }
 
-            <div className={cn("flex w-full h-[120px] opacity-100 items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none",
-                mouseIsOver && "opacity-30")}>
+            <div
+                className={cn("flex w-full h-[120px] opacity-100 items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none",
+                    mouseIsOver && "opacity-30")}>
                 <DesignerElement elementInstance={element}/>
             </div>
 
