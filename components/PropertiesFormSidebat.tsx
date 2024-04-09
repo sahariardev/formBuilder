@@ -3,6 +3,7 @@ import useDesigner from "@/components/hooks/useDesigner";
 import {FormElements} from "@/components/FormElements";
 import {Button} from "@/components/ui/button";
 import {AiOutlineClose} from "react-icons/ai";
+import {Separator} from "@/components/ui/separator";
 
 function PropertiesFormSidebat() {
     const {selectedElement, setSelectedElement} = useDesigner();
@@ -11,7 +12,7 @@ function PropertiesFormSidebat() {
         return null;
     }
 
-    const PropertiesForm = FormElements[selectedElement.type].formComponent;
+    const PropertiesForm = FormElements[selectedElement.type].propertiesComponent;
 
     return (
         <div className="flex flex-col p-2">
@@ -29,7 +30,8 @@ function PropertiesFormSidebat() {
             >
                 <AiOutlineClose/>
             </Button>
-            <PropertiesForm/>
+            <Separator />
+            <PropertiesForm elementInstance={selectedElement}/>
         </div>
     );
 }
