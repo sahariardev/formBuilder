@@ -7,7 +7,6 @@ import {cn} from "@/lib/utils";
 import {ElementsType, FormElementInstance, FormElements} from "@/components/FormElements";
 import useDesigner from "@/components/hooks/useDesigner";
 import {idGenerator} from "@/lib/idGenerator";
-import {element} from "prop-types";
 import {Button} from "@/components/ui/button";
 import {BiSolidTrash} from "react-icons/bi";
 

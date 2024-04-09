@@ -17,7 +17,9 @@ export type FormElement  = {
         elementInstance: FormElementInstance
     }>;
 
-    formComponent: React.FC;
+    formComponent: React.FC<{
+        elementInstance: FormElementInstance
+    }>;
     propertiesComponent: React.FC<{
         elementInstance: FormElementInstance
     }>;
