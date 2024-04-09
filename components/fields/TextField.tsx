@@ -63,9 +63,16 @@ function DesignerComponent({elementInstance}: { elementInstance: FormElementInst
     );
 }
 
-function FormComponent() {
+function FormComponent({elementInstance}: { elementInstance: FormElementInstance }) {
+    const element = elementInstance as CustomInstance;
     return (
-        <div></div>
+        <div className="flex flex-col gap-2 w-full">
+            <Label>{element.extraAttributes.label} {element.extraAttributes.required && "*"}</Label>
+            <Input placeholder={element.extraAttributes.placeHolder}></Input>
+
+            {element.extraAttributes.helperText && (
+                <p className="text-muted-foreground text-[0.8rem]">{element.extraAttributes.helperText}</p>)}
+        </div>
     );
 }
 
@@ -182,7 +189,6 @@ function PropertiesComponent({elementInstance}: { elementInstance: FormElementIn
                         </FormItem>
                     )
                 }/>
-
             </form>
         </Form>
     );
