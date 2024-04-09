@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, {useEffect} from "react";
 import {Form} from "@prisma/client";
 import PublishFormBtn from "@/components/PublishFormBtn";
 import SaveFormBtn from "@/components/SaveFormBtn";
@@ -7,11 +7,14 @@ import PreviewDialogBtn from "@/components/PreviewDialogBtn";
 import Designer from "@/components/Designer";
 import {DndContext, MouseSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
 import DragOverlayWrapper from "@/components/DragOverlayWrapper";
+import useDesigner from "@/components/hooks/useDesigner";
 
 function FormBuilder({form}: { form: Form }) {
 
+    const {setElements} = useDesigner();
+
     const mouseSensor = useSensor(MouseSensor, {
-        activationConstraint : {
+        activationConstraint: {
             distance: 10,
         }
     });
@@ -24,6 +27,11 @@ function FormBuilder({form}: { form: Form }) {
     })
 
     const sensors = useSensors(mouseSensor, touchSensor);
+
+    useEffect(() => {
+        const elements = JSON.parse(form.content);
+        setElements(elements);
+    }, [form, setElements]);
 
     return (
         <DndContext sensors={sensors}>
@@ -39,7 +47,7 @@ function FormBuilder({form}: { form: Form }) {
                         <PreviewDialogBtn/>
                         {!form.published && (
                             <>
-                                <SaveFormBtn/>
+                                <SaveFormBtn id={form.id}/>
                                 <PublishFormBtn/>
                             </>
                         )}

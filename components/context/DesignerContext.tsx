@@ -5,6 +5,7 @@ import {createContext, Dispatch, ReactNode, SetStateAction, useState} from "reac
 
 type DesignerContextType = {
     elements: FormElementInstance[];
+    setElements:  Dispatch<SetStateAction<FormElementInstance[]>>;
     addElement : (index:number, element: FormElementInstance) => void;
     removeElement: (id: string) => void;
     selectedElement: FormElementInstance | null;
@@ -43,6 +44,7 @@ export default function DesignerContextProvider({children}:{children:ReactNode})
 
     return <DesignerContext.Provider value={{
         elements:elements,
+        setElements:setElements,
         addElement: addElement,
         removeElement: removeElement,
         selectedElement: selectedElement,
