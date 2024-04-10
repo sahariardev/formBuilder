@@ -13,6 +13,7 @@ import {Button} from "@/components/ui/button";
 import {toast} from "@/components/ui/use-toast";
 import Link from "next/link";
 import {BsArrowLeft, BsArrowRight} from "react-icons/bs";
+import Confetti from "react-confetti";
 
 function FormBuilder({form}: { form: Form }) {
 
@@ -43,6 +44,7 @@ function FormBuilder({form}: { form: Form }) {
     if (form.published) {
         return (
             <>
+                <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false}/>
                 <div className="flex flex-col items-center justify-center h-full w-full">
                     <div className="max-w-md">
                         <h1 className="text-center text-4xl font-bold text-primary border-b pb-2 mb-10">
