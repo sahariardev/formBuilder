@@ -16,7 +16,7 @@ function SaveFormBtn({id}:{id:number}) {
             await UpdateFormContent(id, jsonElements);
             toast({
                 title: "Success",
-                description: "Your form hase been  saved"
+                description: "Your forms hase been  saved"
             });
         } catch (error) {
             toast({

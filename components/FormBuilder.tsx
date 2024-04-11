@@ -64,7 +64,7 @@ function FormBuilder({form}: { form: Form }) {
                                     title: "Copied!",
                                     description: "Link copied to clipboard"
                                 });
-                            }}/>
+                            }}>Copy link</Button>
                         </div>
                         <div className="flex justify-between">
                             <Button variant={"link"} asChild>
@@ -73,8 +73,6 @@ function FormBuilder({form}: { form: Form }) {
                                     Go back home
                                 </Link>
                             </Button>
-                        </div>
-                        <div className="flex justify-between">
                             <Button variant={"link"} asChild>
                                 <Link href={`/forms/${form.id}`} className="gap-2">
                                     Form details
