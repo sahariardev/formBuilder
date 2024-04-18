@@ -75,8 +75,20 @@ async function FormPage({params}: { params: { id: String } }) {
                     className="shadow-md shadow-red-600"
                 />
             </div>
+
+            <div className="container pt-10">
+                <SubmissionTable id={form.id}/>
+            </div>
         </>
     );
 }
 
 export default FormPage;
+
+function SubmissionTable({id}:{id:number}) {
+    return (
+        <>
+            <h1 className="text-2xl font-bold my-4">Submission</h1>
+        </>
+    );
+}

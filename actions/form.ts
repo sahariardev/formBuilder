@@ -117,7 +117,8 @@ export async function UpdateFormContent(id: number, jsonContent: string) {
         }
     });
 }
-export async function publishFormInDb(id:number) {
+
+export async function publishFormInDb(id: number) {
     const user = await currentUser();
 
     if (!user) {
@@ -134,4 +135,20 @@ export async function publishFormInDb(id:number) {
         }
     });
 
+}
+
+export async function GetFormContentByUrl(formUrl: string) {
+    return await prisma.form.update({
+        select: {
+            content: true,
+        },
+        data: {
+            visits: {
+                increment: 1
+            }
+        },
+        where: {
+            shareURL: formUrl
+        }
+    });
 }
