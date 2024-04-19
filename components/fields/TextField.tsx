@@ -1,13 +1,13 @@
 'use client'
 
-import {ElementsType, FormElement, FormElementInstance} from "@/components/FormElements";
+import {ElementsType, FormElement, FormElementInstance, submitFunction} from "@/components/FormElements";
 import {MdTextFields} from "react-icons/md";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import useDesigner from "@/components/hooks/useDesigner";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Switch} from "@/components/ui/switch";
@@ -63,12 +63,26 @@ function DesignerComponent({elementInstance}: { elementInstance: FormElementInst
     );
 }
 
-function FormComponent({elementInstance}: { elementInstance: FormElementInstance }) {
+function FormComponent({elementInstance, submitValue}: {
+    elementInstance: FormElementInstance,
+    submitValue?: submitFunction
+}) {
     const element = elementInstance as CustomInstance;
+    const [value, setValue] = useState("");
+
     return (
         <div className="flex flex-col gap-2 w-full">
             <Label>{element.extraAttributes.label} {element.extraAttributes.required && "*"}</Label>
-            <Input placeholder={element.extraAttributes.placeHolder}></Input>
+            <Input placeholder={element.extraAttributes.placeHolder}
+                   onBlur={(e) => {
+                       if (!submitValue) {
+                           return;
+                       }
+                       submitValue(element.id, e.target.value);
+                   }}
+                   onChange={(e) => setValue(e.target.value)}>
+
+            </Input>
 
             {element.extraAttributes.helperText && (
                 <p className="text-muted-foreground text-[0.8rem]">{element.extraAttributes.helperText}</p>)}
