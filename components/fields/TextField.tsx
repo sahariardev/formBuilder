@@ -11,6 +11,7 @@ import {useEffect, useState} from "react";
 import useDesigner from "@/components/hooks/useDesigner";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Switch} from "@/components/ui/switch";
+import {cn} from "@/lib/utils";
 
 const type: ElementsType = "TextField";
 
@@ -41,7 +42,16 @@ export const TextFieldFormElement: FormElement = {
     },
     designerComponent: DesignerComponent,
     formComponent: FormComponent,
-    propertiesComponent: PropertiesComponent
+    propertiesComponent: PropertiesComponent,
+    validate: (formElement: FormElementInstance, currentValue: string): boolean => {
+        const element = formElement as CustomInstance;
+
+        if (element.extraAttributes.required) {
+            return currentValue.length > 0;
+        }
+
+        return true;
+    }
 }
 
 type propertiesFormSchemaType = z.infer<typeof propertiesSchema>;
@@ -63,29 +73,43 @@ function DesignerComponent({elementInstance}: { elementInstance: FormElementInst
     );
 }
 
-function FormComponent({elementInstance, submitValue}: {
+function FormComponent({elementInstance, submitValue, isInvalid, defaultValue}: {
     elementInstance: FormElementInstance,
     submitValue?: submitFunction
+    isInvalid?: boolean,
+    defaultValue?: string
 }) {
     const element = elementInstance as CustomInstance;
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState(defaultValue || "");
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        setError(isInvalid === true)
+    }, [isInvalid]);
 
     return (
         <div className="flex flex-col gap-2 w-full">
-            <Label>{element.extraAttributes.label} {element.extraAttributes.required && "*"}</Label>
-            <Input placeholder={element.extraAttributes.placeHolder}
-                   onBlur={(e) => {
-                       if (!submitValue) {
-                           return;
-                       }
-                       submitValue(element.id, e.target.value);
-                   }}
-                   onChange={(e) => setValue(e.target.value)}>
+            <Label
+                className={cn(error && "text-red-500")}>{element.extraAttributes.label} {element.extraAttributes.required && "*"}</Label>
+            <Input
+                className={cn(error && "border-red-500")}
+                placeholder={element.extraAttributes.placeHolder}
+                onBlur={(e) => {
+                    if (!submitValue) {
+                        return;
+                    }
+                    const valid = TextFieldFormElement.validate(element, e.target.value);
+                    setError(!valid);
+                    if (!valid) return;
+
+                    submitValue(element.id, e.target.value);
+                }}
+                onChange={(e) => setValue(e.target.value)}>
 
             </Input>
 
             {element.extraAttributes.helperText && (
-                <p className="text-muted-foreground text-[0.8rem]">{element.extraAttributes.helperText}</p>)}
+                <p className={cn('text-muted-foreground text-[0.8rem]', error && "text-red-500")}>{element.extraAttributes.helperText}</p>)}
         </div>
     );
 }
