@@ -9,19 +9,21 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useEffect} from "react";
 import useDesigner from "@/components/hooks/useDesigner";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {LuHeading1, LuHeading2} from "react-icons/lu";
+import {LuHeading1} from "react-icons/lu";
+import {BsTextParagraph} from "react-icons/bs";
+import {Textarea} from "@/components/ui/textarea";
 
-const type: ElementsType = "SubtitleField";
+const type: ElementsType = "ParagraphField";
 
 const extraAttributes = {
-    subtitle: "Subtitle field"
+    text: "Text Here"
 }
 
 const propertiesSchema = z.object({
-    subtitle: z.string().min(2).max(50)
+    text: z.string().min(2).max(500)
 });
 
-export const SubtitleFieldFormElement: FormElement = {
+export const ParagraphFieldFormElement: FormElement = {
     type,
     construct: (id: string) => ({
         id,
@@ -29,8 +31,8 @@ export const SubtitleFieldFormElement: FormElement = {
         extraAttributes
     }),
     designerBtnElement: {
-        icon: (clasNames) => <LuHeading2 className={clasNames}/>,
-        label: "Subtitle Field"
+        icon: (clasNames) => <BsTextParagraph className={clasNames}/>,
+        label: "Paragraph Field"
     },
     designerComponent: DesignerComponent,
     formComponent: FormComponent,
@@ -48,8 +50,8 @@ function DesignerComponent({elementInstance}: { elementInstance: FormElementInst
     const element = elementInstance as CustomInstance;
     return (
         <div className="flex flex-col gap-2 w-full">
-            <Label className="text-muted-foreground"> SubTitle field</Label>
-            <p className="text-lg">{element.extraAttributes.subtitle}</p>
+            <Label className="text-muted-foreground"> Title field</Label>
+            <p className="text-xl">{element.extraAttributes.title}</p>
         </div>
     );
 }
@@ -61,7 +63,7 @@ function FormComponent({elementInstance}: {
     const {title} = element.extraAttributes;
 
     return (
-        <p className="text-lg"> {title} </p>
+        <p className="text-xl"> {title} </p>
     );
 }
 
@@ -72,7 +74,7 @@ function PropertiesComponent({elementInstance}: { elementInstance: FormElementIn
         resolver: zodResolver(propertiesSchema),
         mode: "onBlur",
         defaultValues: {
-            subtitle: element.extraAttributes.subtitle
+            text: element.extraAttributes.text
         }
     });
 
@@ -84,7 +86,7 @@ function PropertiesComponent({elementInstance}: { elementInstance: FormElementIn
         updateElement(element.id, {
             ...element,
             extraAttributes: {
-                subtitle: values.subtitle
+                text: values.text
             }
         })
     }
@@ -97,12 +99,12 @@ function PropertiesComponent({elementInstance}: { elementInstance: FormElementIn
                       e.preventDefault()
                   }}
                   className="space-y-3">
-                <FormField control={form.control} name="subtitle" render={({field}) =>
+                <FormField control={form.control} name="text" render={({field}) =>
                     (
                         <FormItem>
-                            <FormLabel>Subtitle</FormLabel>
+                            <FormLabel>Text</FormLabel>
                             <FormControl>
-                                <Input {...field} onKeyDown={(e) => {
+                                <Textarea rows={5} {...field} onKeyDown={(e) => {
                                     if (e.key === "Enter") {
                                         e.currentTarget.blur();
                                     }
