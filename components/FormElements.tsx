@@ -14,7 +14,8 @@ export type ElementsType =
     | "ParagraphField"
     | "SeparatorField"
     | "SpacerField"
-    | "NumberField";
+    | "NumberField"
+    | "TextAreaField";
 
 export type submitFunction = (key: string, value: string) => void;
 
@@ -61,5 +62,6 @@ export const FormElements: FormElementsType = {
     ParagraphField: ParagraphFieldFormElement,
     SeparatorField: SeparatorFieldFormElement,
     SpacerField: SpacerFieldFormElement,
-    NumberField: NumberFieldFormElement
+    NumberField: NumberFieldFormElement,
+    TextAreaField: TextFieldFormElement
 }
