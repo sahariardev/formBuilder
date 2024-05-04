@@ -58,10 +58,10 @@ function FormComponent({elementInstance}: {
     elementInstance: FormElementInstance
 }) {
     const element = elementInstance as CustomInstance;
-    const {title} = element.extraAttributes;
+    const {subtitle} = element.extraAttributes;
 
     return (
-        <p className="text-lg"> {title} </p>
+        <p className="text-lg"> {subtitle} </p>
     );
 }
 
