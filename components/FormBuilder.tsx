@@ -17,7 +17,7 @@ import Confetti from "react-confetti";
 
 function FormBuilder({form}: { form: Form }) {
 
-    const {setElements} = useDesigner();
+    const {setElements, setSelectedElement} = useDesigner();
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
@@ -37,7 +37,8 @@ function FormBuilder({form}: { form: Form }) {
     useEffect(() => {
         const elements = JSON.parse(form.content);
         setElements(elements);
-    }, [form, setElements]);
+        setSelectedElement(null);
+    }, [form, setElements, setSelectedElement]);
 
     const shareUrl = `${window.location, origin}/submit/${form.shareURL}`;
 
