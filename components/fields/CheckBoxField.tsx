@@ -47,7 +47,7 @@ export const CheckBoxFieldFormEmelemnt: FormElement = {
         const element = formElement as CustomInstance;
 
         if (element.extraAttributes.required) {
-            return currentValue !== "true";
+            return currentValue === "true";
         }
 
         return true;
