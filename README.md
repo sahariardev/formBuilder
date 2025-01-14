@@ -37,8 +37,8 @@ A form builder application built with Next.js and Prisma, enabling users to conf
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/nextjs-prisma-forms.git
-   cd nextjs-prisma-forms
+   git clone git@github.com:sahariardev/formBuilder.git
+   cd formBuilder
    ```
 
 2. **Install dependencies:**
@@ -52,8 +52,8 @@ A form builder application built with Next.js and Prisma, enabling users to conf
    - Create a `.env` file in the root of your project.
    - Add the following environment variables:
      ```env
-     DATABASE_URL=your-database-connection-string
-     NEXTAUTH_SECRET=your-nextauth-secret
+     POSTGRES_PRISMA_URL=your-database-connection-string
+     CLERK_SECRET_KEY=your-nextauth-secret
      ```
    
 4. **Run Prisma migrations:**
